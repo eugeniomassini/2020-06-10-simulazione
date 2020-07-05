@@ -79,7 +79,7 @@ public class FXMLController {
     	model.creaGrafo(genere);
     	
     	txtResult.appendText(String.format("#Vertici: %d\n#Archi: %d\n", model.vertexSet().size(), model.edgeSet().size()));
-    	
+    	boxAttore.getItems().clear();
     	boxAttore.getItems().addAll(model.getAttori());
     	
     	
@@ -87,6 +87,30 @@ public class FXMLController {
 
     @FXML
     void doSimulazione(ActionEvent event) {
+    	txtResult.clear();
+    	String genere = boxGenere.getValue();
+    	
+    	if(genere==null) {
+    		txtResult.appendText("Errore selezionare un genere per generare il grafo");
+    		return;
+    	}
+    	String numeroGiorniS = txtGiorni.getText();
+    	
+    	int numeroGiorni=0;
+    	
+    	try {
+			numeroGiorni = Integer.parseInt(numeroGiorniS);
+		} catch (NumberFormatException e) {
+			txtResult.appendText("Errore inserisci un numero di giorni");
+			e.printStackTrace();
+			return;
+		}
+    	
+    	for(Actor a: model.simula(numeroGiorni, genere)) {
+    		txtResult.appendText(String.format("%s\n", a));
+    	}
+    	
+    	txtResult.appendText(String.format("Giorni di pausa: %d", model.getGiorniPausa()));
 
     }
 
